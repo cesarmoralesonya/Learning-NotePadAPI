@@ -13,19 +13,19 @@ namespace Infraestructure.Data
             {
                 context.Notes.AddRange(
                     new Note
-                    {
-                        Id = 1,
-                        Title = "Recordatorio .NET Core",
-                        Body = "Profundizar en la programación con VSCode",
-                        DateTime = DateTime.Now,
-                    },
+                    (
+                        1,
+                        "Recordatorio .NET Core",
+                        "Profundizar en la programación con VSCode",
+                        DateTime.Now
+                    ),
                     new Note
-                    {
-                        Id = 2,
-                        Title = "Recordatorio Angular",
-                        Body = "Profundizar en el lenguaje TypeScript",
-                        DateTime = DateTime.Now,
-                    });
+                    (
+                        2,
+                        "Recordatorio Angular",
+                        "Profundizar en el lenguaje TypeScript",
+                        DateTime.Now
+                    ));
                 context.SaveChanges();
             }
         }

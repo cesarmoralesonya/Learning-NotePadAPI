@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace IntegrationTests.Repositories.NoteRepositoryTests
 {
-    public class GetById
+    public class DeleteNote
     {
         private readonly NotePadContext _notePadContext;
 
@@ -18,32 +18,32 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
 
         private readonly ITestOutputHelper _output;
 
-        public GetById(ITestOutputHelper output)
+        public DeleteNote(ITestOutputHelper output)
         {
             _output = output;
             var dbOptions = new DbContextOptionsBuilder<NotePadContext>()
-                .UseInMemoryDatabase(databaseName: "TestGetNoteById")
+                .UseInMemoryDatabase(databaseName: "TestDeleteNote")
                 .Options;
             _notePadContext = new NotePadContext(dbOptions);
             _noteRepository = new NoteRepository(_notePadContext);
         }
 
         [Fact]
-        public async Task GetExistingNote()
+        public async Task CheckIsDeleted()
         {
             //Arranges
-            var existingNote = NoteBuilder.WithDefaultValues();
-            int noteId = existingNote.Id;
+            var NoteToDelete = NoteBuilder.WithDefaultValues();
+            var noteId = NoteToDelete.Id;
             _output.WriteLine($"Id: {noteId}");
 
             //Acts
-            _notePadContext.Notes.Add(existingNote);
+            _notePadContext.Notes.Add(NoteToDelete);
             _notePadContext.SaveChanges();
-            var noteFromRepo = await _noteRepository.GetByIdAsync(noteId);
+            await _noteRepository.DeleteAsync(NoteToDelete);
+            var dbNote = _notePadContext.Notes.Find(noteId);
 
             //Asserts
-            Assert.Equal(NoteBuilder.TestId, noteFromRepo.Id);
+            Assert.Null(dbNote);
         }
-
     }
 }

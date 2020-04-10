@@ -8,41 +8,41 @@ using Xunit.Abstractions;
 
 namespace IntegrationTests.Repositories.NoteRepositoryTests
 {
-    public class GetById
+    public class AddNote
     {
         private readonly NotePadContext _notePadContext;
-
+        
         private readonly NoteRepository _noteRepository;
 
-        private NoteBuilder NoteBuilder { get; } = new NoteBuilder();
+        private NoteBuilder NoteBuilder { get; }  = new NoteBuilder();
 
         private readonly ITestOutputHelper _output;
 
-        public GetById(ITestOutputHelper output)
+        public AddNote(ITestOutputHelper output)
         {
             _output = output;
             var dbOptions = new DbContextOptionsBuilder<NotePadContext>()
-                .UseInMemoryDatabase(databaseName: "TestGetNoteById")
+                .UseInMemoryDatabase(databaseName: "TestAddNote")
                 .Options;
             _notePadContext = new NotePadContext(dbOptions);
             _noteRepository = new NoteRepository(_notePadContext);
         }
 
         [Fact]
-        public async Task GetExistingNote()
+        public async Task CheckNoteIsCorrect()
         {
             //Arranges
-            var existingNote = NoteBuilder.WithDefaultValues();
-            int noteId = existingNote.Id;
-            _output.WriteLine($"Id: {noteId}");
+            var note = NoteBuilder.WithDefaultValues();
 
             //Acts
-            _notePadContext.Notes.Add(existingNote);
-            _notePadContext.SaveChanges();
-            var noteFromRepo = await _noteRepository.GetByIdAsync(noteId);
+            await _noteRepository.AddAsync(note);
+            var noteFromDb = await _notePadContext.Notes.FindAsync(note.Id);
 
             //Asserts
-            Assert.Equal(NoteBuilder.TestId, noteFromRepo.Id);
+            Assert.Equal(note.Id, noteFromDb.Id);
+            Assert.Equal(note.Title, noteFromDb.Title);
+            Assert.Equal(note.Body, noteFromDb.Body);
+            Assert.Equal(note.DateTime, noteFromDb.DateTime);
         }
 
     }

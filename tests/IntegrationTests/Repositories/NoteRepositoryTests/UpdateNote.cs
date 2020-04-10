@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace IntegrationTests.Repositories.NoteRepositoryTests
 {
-    public class GetById
+    public class UpdateNote
     {
         private readonly NotePadContext _notePadContext;
 
@@ -18,32 +18,36 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
 
         private readonly ITestOutputHelper _output;
 
-        public GetById(ITestOutputHelper output)
+        public UpdateNote(ITestOutputHelper output)
         {
             _output = output;
             var dbOptions = new DbContextOptionsBuilder<NotePadContext>()
-                .UseInMemoryDatabase(databaseName: "TestGetNoteById")
+                .UseInMemoryDatabase(databaseName: "TestUpdateNote")
                 .Options;
             _notePadContext = new NotePadContext(dbOptions);
             _noteRepository = new NoteRepository(_notePadContext);
         }
 
         [Fact]
-        public async Task GetExistingNote()
+        public async Task UpdateAllProperties()
         {
             //Arranges
-            var existingNote = NoteBuilder.WithDefaultValues();
-            int noteId = existingNote.Id;
+            var NoteToUpdate = NoteBuilder.WithDefaultValues();
+            var UpdateNote = NoteBuilder.UpdateDefaultValues();
+            var noteId = NoteToUpdate.Id;
             _output.WriteLine($"Id: {noteId}");
 
             //Acts
-            _notePadContext.Notes.Add(existingNote);
+            _notePadContext.Notes.Add(NoteToUpdate);
             _notePadContext.SaveChanges();
-            var noteFromRepo = await _noteRepository.GetByIdAsync(noteId);
+            await _noteRepository.UpdateAsync(UpdateNote);
+            var dbNote = _notePadContext.Notes.Find(noteId);
 
             //Asserts
-            Assert.Equal(NoteBuilder.TestId, noteFromRepo.Id);
+            Assert.Equal(NoteToUpdate.Id, dbNote.Id);
+            Assert.NotEqual(NoteToUpdate.Title, dbNote.Title);
+            Assert.NotEqual(NoteToUpdate.Body, dbNote.Body);
+            Assert.NotEqual(NoteToUpdate.DateTime, dbNote.DateTime);
         }
-
     }
 }

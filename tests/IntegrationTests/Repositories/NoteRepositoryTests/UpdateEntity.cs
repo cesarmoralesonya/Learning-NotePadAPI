@@ -33,18 +33,20 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
         public async Task UpdateAllProperties()
         {
             //Arranges
-            var NoteToUpdate = NoteBuilder.WithDefaultValues();
+            var existingNote = NoteBuilder.WithDefaultValues();
+            _notePadContext.Notes.Add(existingNote);
+            _notePadContext.SaveChanges();
+            _output.WriteLine($"Note to update Id: {existingNote.Id}");
             var UpdateNote = NoteBuilder.UpdateTitleValue();
+            UpdateNote.Id = existingNote.Id;
+            _notePadContext.Entry(existingNote).State = EntityState.Detached;
 
             //Acts
-            _notePadContext.Notes.Add(NoteToUpdate);
-            _notePadContext.SaveChanges();
-            _output.WriteLine($"Note to update Id: {NoteToUpdate.Id}");
             await _noteRepository.UpdateAsync(UpdateNote);
-            var dbNote = _notePadContext.Notes.Find(NoteToUpdate.Id);
+            var dbNote = _notePadContext.Notes.Find(existingNote.Id);
 
             //Asserts
-            Assert.NotEqual(NoteToUpdate.Title, dbNote.Title);
+            Assert.NotEqual(existingNote.Title, dbNote.Title);
         }
     }
 }

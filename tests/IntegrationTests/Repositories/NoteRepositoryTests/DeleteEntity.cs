@@ -33,12 +33,13 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
         {
             //Arranges
             var NoteToDelete = NoteBuilder.WithDefaultValues();
+            _notePadContext.Notes.Add(NoteToDelete);
+            _notePadContext.SaveChanges();
             var noteId = NoteToDelete.Id;
             _output.WriteLine($"Id: {noteId}");
 
             //Acts
-            _notePadContext.Notes.Add(NoteToDelete);
-            _notePadContext.SaveChanges();
+            
             await _noteRepository.DeleteAsync(NoteToDelete);
             var dbNote = _notePadContext.Notes.Find(noteId);
 

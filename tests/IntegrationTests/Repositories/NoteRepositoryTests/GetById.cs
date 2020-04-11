@@ -33,11 +33,11 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
         {
             //Arranges
             var existingNote = NoteBuilder.WithDefaultValues();
+            _notePadContext.Notes.Add(existingNote);
+            _notePadContext.SaveChanges();
             _output.WriteLine($"existing note Id: {existingNote.Id}");
 
             //Acts
-            _notePadContext.Notes.Add(existingNote);
-            _notePadContext.SaveChanges();
             var noteFromRepo = await _noteRepository.GetByIdAsync(existingNote.Id);
 
             //Asserts

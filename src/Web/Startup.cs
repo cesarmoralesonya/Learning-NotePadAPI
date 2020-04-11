@@ -20,6 +20,8 @@ namespace Web
 
             services.AddScoped<INoteRepository, NoteRepository>();
 
+            services.AddSwaggerGen(c => c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "My API", Version = "v1" }));
+
             services.AddControllers();            
         }
 
@@ -36,6 +38,13 @@ namespace Web
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(config =>
+            {
+                config.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseEndpoints(endpoints =>
             {

@@ -35,7 +35,7 @@ namespace Web
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     try
                     {
-                        SeedData.Initialize(context);
+                        NotePadContextSeed.Initialize(context);
                         Debug.Print("A database seeding was initialize");
                     }
                     catch (Exception ex)

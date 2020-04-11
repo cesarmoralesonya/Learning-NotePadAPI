@@ -7,7 +7,6 @@ namespace UnitTests.Builder
     {
         private Note _note;
 
-        public int TestId = 12345;
         public string TestTitle = "Test title";
         public string TestBody = "Test Body";
         public DateTime TestDateTime = DateTime.MinValue;
@@ -23,13 +22,13 @@ namespace UnitTests.Builder
 
         public Note WithDefaultValues()
         {
-            _note = new Note(TestId, TestTitle, TestBody, TestDateTime);
+            _note = new Note(TestTitle, TestBody, TestDateTime);
             return _note;
         }
 
-        public Note UpdateDefaultValues()
+        public Note UpdateTitleValue()
         {
-            _note = new Note(TestId, TestTitleUpdate, TestBodyUpdate, TestDateTimeUpdate);
+            _note = new Note(TestTitleUpdate, TestBody, TestDateTime);
             return _note;
         }
     }

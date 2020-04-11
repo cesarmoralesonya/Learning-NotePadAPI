@@ -14,7 +14,6 @@ namespace UnitTests.ApplicationCore.Entities
             var note = builder.WithDefaultValues();
             
             //Assert
-            Assert.Equal(note.Id, builder.TestId);
             Assert.Equal(note.Title, builder.TestTitle);
             Assert.Equal(note.Body, builder.TestBody);
             Assert.Equal(note.DateTime, builder.TestDateTime);

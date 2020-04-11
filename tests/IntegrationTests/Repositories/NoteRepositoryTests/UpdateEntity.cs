@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace IntegrationTests.Repositories.NoteRepositoryTests
 {
-    public class UpdateNote
+    public class UpdateEntity
     {
         private readonly NotePadContext _notePadContext;
 
@@ -18,11 +18,12 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
 
         private readonly ITestOutputHelper _output;
 
-        public UpdateNote(ITestOutputHelper output)
+        public UpdateEntity(ITestOutputHelper output)
         {
             _output = output;
             var dbOptions = new DbContextOptionsBuilder<NotePadContext>()
                 .UseInMemoryDatabase(databaseName: "TestUpdateNote")
+                .EnableSensitiveDataLogging()
                 .Options;
             _notePadContext = new NotePadContext(dbOptions);
             _noteRepository = new NoteRepository(_notePadContext);
@@ -33,21 +34,17 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
         {
             //Arranges
             var NoteToUpdate = NoteBuilder.WithDefaultValues();
-            var UpdateNote = NoteBuilder.UpdateDefaultValues();
-            var noteId = NoteToUpdate.Id;
-            _output.WriteLine($"Id: {noteId}");
+            var UpdateNote = NoteBuilder.UpdateTitleValue();
 
             //Acts
             _notePadContext.Notes.Add(NoteToUpdate);
             _notePadContext.SaveChanges();
+            _output.WriteLine($"Note to update Id: {NoteToUpdate.Id}");
             await _noteRepository.UpdateAsync(UpdateNote);
-            var dbNote = _notePadContext.Notes.Find(noteId);
+            var dbNote = _notePadContext.Notes.Find(NoteToUpdate.Id);
 
             //Asserts
-            Assert.Equal(NoteToUpdate.Id, dbNote.Id);
             Assert.NotEqual(NoteToUpdate.Title, dbNote.Title);
-            Assert.NotEqual(NoteToUpdate.Body, dbNote.Body);
-            Assert.NotEqual(NoteToUpdate.DateTime, dbNote.DateTime);
         }
     }
 }

@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace IntegrationTests.Repositories.NoteRepositoryTests
 {
-    public class DeleteNote
+    public class DeleteEntity
     {
         private readonly NotePadContext _notePadContext;
 
@@ -18,7 +18,7 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
 
         private readonly ITestOutputHelper _output;
 
-        public DeleteNote(ITestOutputHelper output)
+        public DeleteEntity(ITestOutputHelper output)
         {
             _output = output;
             var dbOptions = new DbContextOptionsBuilder<NotePadContext>()

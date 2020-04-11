@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace IntegrationTests.Repositories.NoteRepositoryTests
 {
-    public class AddNote
+    public class AddEntity
     {
         private readonly NotePadContext _notePadContext;
         
@@ -18,7 +18,7 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
 
         private readonly ITestOutputHelper _output;
 
-        public AddNote(ITestOutputHelper output)
+        public AddEntity(ITestOutputHelper output)
         {
             _output = output;
             var dbOptions = new DbContextOptionsBuilder<NotePadContext>()
@@ -29,7 +29,7 @@ namespace IntegrationTests.Repositories.NoteRepositoryTests
         }
 
         [Fact]
-        public async Task CheckNoteIsCorrect()
+        public async Task CheckEntityIsCorrect()
         {
             //Arranges
             var note = NoteBuilder.WithDefaultValues();

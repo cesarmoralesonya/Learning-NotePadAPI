@@ -21,9 +21,9 @@ namespace ApplicationCore.Entities
             DateTime = dateTime;
         }
 
-        public string Title { get; set; }
-        public string Body { get; set; }
+        public string Title { get; private set; }
+        public string Body { get; private set; }
         [DataType(DataType.Date)]
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; private set; }
     }
 }

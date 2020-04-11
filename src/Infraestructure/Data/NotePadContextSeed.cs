@@ -7,6 +7,8 @@ namespace Infraestructure.Data
 {
     public static class NotePadContextSeed
     {
+        public static int Count { get; set; }
+
         public static void Initialize(NotePadContext context)
         {
             if(!context.Notes.Any())
@@ -25,6 +27,7 @@ namespace Infraestructure.Data
                         DateTime.Now
                     ));
                 context.SaveChanges();
+                Count = context.Notes.Count();
             }
         }
     }

@@ -6,7 +6,7 @@ namespace ApplicationCore.Entities
 {
     public class Note: BaseEntity
     {
-        private Note()
+        public Note()
         {
             // required by EF
         }
@@ -21,9 +21,9 @@ namespace ApplicationCore.Entities
             DateTime = dateTime;
         }
 
-        public string Title { get; private set; }
-        public string Body { get; private set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
         [DataType(DataType.Date)]
-        public DateTime DateTime { get; private set; }
+        public DateTime DateTime { get; set; }
     }
 }

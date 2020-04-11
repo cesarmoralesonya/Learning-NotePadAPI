@@ -70,7 +70,7 @@ namespace Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             await _noteRepository.AddAsync(note);
@@ -82,11 +82,6 @@ namespace Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNote([FromRoute] int id)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest();
-            }
-
             var note = await _noteRepository.GetByIdAsync(id);
             if(note == null)
             {

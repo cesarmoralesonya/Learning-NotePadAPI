@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -41,28 +42,10 @@ namespace UnitTests.Web.Controllers.NotesControllerTests
         }
 
         [Fact]
-        public async Task NotFound()
-        {
-            //Arranges
-            var mockRepo = new Mock<INoteRepository>();
-            mockRepo.Setup(repo => repo.GetByIdAsync(PutTestNote().Id))
-                .ReturnsAsync((Note)null);
-            var controller = new NotesController(mockRepo.Object);
-
-            //Acts
-            var result = await controller.PutNote(PutTestNote().Id, PutTestNote());
-
-            //Asserts
-            Assert.IsType<NotFoundResult>(result);
-        }
-
-        [Fact]
         public async Task NoteUpdated()
         {
             //Arranges
-            var mockRepo = new Mock<INoteRepository>();
-            mockRepo.Setup(repo => repo.GetByIdAsync(PutTestNote().Id))
-                .ReturnsAsync(PutTestNote());
+            var mockRepo = new Mock<INoteRepository>();            
             mockRepo.Setup(repo => repo.UpdateAsync(PutTestNote()));
             var controller = new NotesController(mockRepo.Object);
 
@@ -71,6 +54,23 @@ namespace UnitTests.Web.Controllers.NotesControllerTests
 
             //Asserts
             Assert.IsType<NoContentResult>(result);
+        }
+
+        [Fact]
+        public async Task NotFound()
+        {
+            //Arranges
+            var mockRepo = new Mock<INoteRepository>(MockBehavior.Strict);
+            mockRepo.Setup(repo => repo.UpdateAsync(It.IsAny<Note>()))
+                    .Throws(new DbUpdateConcurrencyException("Test"));
+                    
+            var controller = new NotesController(mockRepo.Object);
+
+            //Acts
+            var result = await controller.PutNote(PutTestNote().Id, PutTestNote());
+
+            //Asserts
+            Assert.IsType<NotFoundResult>(result);
         }
 
         #region snippet_PutTestNote

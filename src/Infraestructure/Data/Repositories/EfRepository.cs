@@ -33,7 +33,6 @@ namespace Infraestructure.Data.Repositories
         public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            _dbContext.Set<T>().Update(entity);
             await _dbContext.SaveChangesAsync();
         }
 

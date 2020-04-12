@@ -1,6 +1,8 @@
 ﻿using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -53,13 +55,14 @@ namespace Web.Controllers
                 return BadRequest();
             }
 
-            var noteRepo = await _noteRepository.GetByIdAsync(id);
-            if (noteRepo == null)
+            try
+            {
+                await _noteRepository.UpdateAsync(note);
+            }
+            catch(DbUpdateConcurrencyException)            
             {
                 return NotFound();
             }
-
-            await _noteRepository.UpdateAsync(note);
 
             return NoContent();
         }

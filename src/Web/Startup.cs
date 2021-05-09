@@ -54,6 +54,7 @@ namespace Web
             app.UseSwaggerUI(config =>
             {
                 config.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                config.RoutePrefix = string.Empty;
             });
 
             app.UseEndpoints(endpoints =>

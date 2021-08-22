@@ -40,7 +40,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SOLUTION_PATH: TransactionsSummaryApi.sln
+          SOLUTION_PATH: NotePadAPI.sln
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"cesarmoralesonya_Learning-NotePadAPI" /o:"moralescorp" /d:sonar.cs.opencover.reportsPaths="**\coverage.opencover.xml" /d:sonar.cs.vstest.reportsPaths="**\*.trx" /d:sonar.coverage.exclusions="**Test**" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
